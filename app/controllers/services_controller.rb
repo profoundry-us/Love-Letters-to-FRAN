@@ -94,6 +94,7 @@ class ServicesController < ApplicationController
         @authhash[:name] = (omniauth['raw_info']['name'] ? omniauth['raw_info']['name'] : '')
         @authhash[:id] = (omniauth['raw_info']['screen_name'] ? omniauth['raw_info']['screen_)name'] : '')
         @authhash[:provider] = (omniauth['provider'] ? omniauth['provider'] : '')
+        puts " *** HERE 0.4: #{@authhash.inspect}"
       elsif service_route == 'github'
         omniauth['user_info']['email'] ? @authhash[:email] =  omniauth['user_info']['email'] : @authhash[:email] = ''
         omniauth['user_info']['name'] ? @authhash[:name] =  omniauth['user_info']['name'] : @authhash[:name] = ''
