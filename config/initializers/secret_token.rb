@@ -4,4 +4,12 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Fran::Application.config.secret_token = '1d61af4674ed9e21dda347ee09fe92e50ea52a6c5087531175f281c91a1da6e785d7b97be236cdc9903dcbc8c2bbc8f1f306baad466dc0290feed89629b8254a'
+Fran::Applicaiton.config.session_store = :cookie_store
+Fran::Application.config.session = {
+  :key => '_omniauth_fran_session',
+  :domain => nil,
+  :expire_after => 1.month,
+  :secure => false,
+  :httponly => true,
+  :secret => 'dbd458a1c22bffc16c9d7361c904addc50b4a5377871b40c4513f7a74dac3d6c19ce62279d437ad9ebadd4c3166da4e0fd6a2b0a3532d470818ad5a3ca4c6114'
+}
