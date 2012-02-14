@@ -11,5 +11,5 @@ Fran::Application.config.session = {
   :expire_after => 1.month,
   :secure => false,
   :httponly => true,
-  :secret => 'dbd458a1c22bffc16c9d7361c904addc50b4a5377871b40c4513f7a74dac3d6c19ce62279d437ad9ebadd4c3166da4e0fd6a2b0a3532d470818ad5a3ca4c6114'
+  :secret_token => 'dbd458a1c22bffc16c9d7361c904addc50b4a5377871b40c4513f7a74dac3d6c19ce62279d437ad9ebadd4c3166da4e0fd6a2b0a3532d470818ad5a3ca4c6114'
 }
