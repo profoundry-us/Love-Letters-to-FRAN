@@ -89,7 +89,7 @@ class ServicesController < ApplicationController
         omniauth['provider'] ? @authhash[:provider] = omniauth['provider'] : @authhash[:provider] = ''
       elsif service_route == 'twitter'
         # Email is not provided by twitter
-        puts " *** Here 0.3: #{omniauth['uid']}, #{omniauth['user_info'].inspect}"
+        puts " *** Here 0.3: #{omniauth['uid']}, #{omniauth['raw_info']['name'].inspect}, #{omniauth['raw_info']['screen_name'].inspect}"
         @authhash[:email] = ""
         @authhash[:name] = (omniauth['raw_info']['name'] ? omniauth['raw_info']['name'] : '')
         @authhash[:id] = (omniauth['raw_info']['screen_name'] ? omniauth['raw_info']['screen_)name'] : '')
