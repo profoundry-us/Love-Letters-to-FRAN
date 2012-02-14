@@ -70,8 +70,6 @@ class ServicesController < ApplicationController
     # get the full hash from omniauth
     omniauth = request.env['omniauth.auth']
 
-    puts " *** Here 0"
-    
     # continue only if hash and parameter exist
     if omniauth and params[:service]
 
@@ -80,8 +78,6 @@ class ServicesController < ApplicationController
       # create a new hash
       @authhash = Hash.new
 
-      puts " *** Here 0.25: #{omniauth.inspect}"
-      
       if service_route == 'facebook'
         omniauth['extra']['user_hash']['email'] ? @authhash[:email] =  omniauth['extra']['user_hash']['email'] : @authhash[:email] = ''
         omniauth['extra']['user_hash']['name'] ? @authhash[:name] =  omniauth['extra']['user_hash']['name'] : @authhash[:name] = ''
@@ -89,52 +85,32 @@ class ServicesController < ApplicationController
         omniauth['provider'] ? @authhash[:provider] = omniauth['provider'] : @authhash[:provider] = ''
       elsif service_route == 'twitter'
         # Email is not provided by twitter
-        puts " *** Here 0.3: #{omniauth['uid']}, #{omniauth['info']['name'].inspect}, #{omniauth['info']['nickname'].inspect}"
         @authhash[:email] = ""
         @authhash[:name] = (omniauth['info']['name'] ? omniauth['info']['name'] : '')
+        @authhash[:username] = (omniauth['info']['nickname'] ? omniauth['info']['nickname'] : '')
         @authhash[:uid] = (omniauth['uid'] ? omniauth['uid'] : '')
         @authhash[:provider] = (omniauth['provider'] ? omniauth['provider'] : '')
-        puts " *** HERE 0.4: #{@authhash.inspect}"
-      elsif service_route == 'github'
-        omniauth['user_info']['email'] ? @authhash[:email] =  omniauth['user_info']['email'] : @authhash[:email] = ''
-        omniauth['user_info']['name'] ? @authhash[:name] =  omniauth['user_info']['name'] : @authhash[:name] = ''
-        omniauth['extra']['user_hash']['id'] ? @authhash[:uid] =  omniauth['extra']['user_hash']['id'].to_s : @authhash[:uid] = ''
-        omniauth['provider'] ? @authhash[:provider] =  omniauth['provider'] : @authhash[:provider] = ''  
-      elsif ['google', 'yahoo', 'myopenid', 'open_id'].index(service_route) != nil
-        omniauth['user_info']['email'] ? @authhash[:email] =  omniauth['user_info']['email'] : @authhash[:email] = ''
-        omniauth['user_info']['name'] ? @authhash[:name] =  omniauth['user_info']['name'] : @authhash[:name] = ''
-        omniauth['uid'] ? @authhash[:uid] = omniauth['uid'].to_s : @authhash[:uid] = ''
-        omniauth['provider'] ? @authhash[:provider] = omniauth['provider'] : @authhash[:provider] = ''
       else        
-        # debug to output the hash that has been returned when adding new services
-        render :text => omniauth.to_yaml
+        render :text => "Unknown service '#{service_route}'."
         return
       end 
 
-      puts " *** Here 0.5"
-      
       if @authhash[:uid] != '' and @authhash[:provider] != ''
-        puts " *** Here 1: #{@authhash[:provider]}, #{@authhash[:uid]}"
         
         auth = Service.find_by_provider_and_uid(@authhash[:provider], @authhash[:uid])
-        puts " *** Here 1.25"
-
 
         # if the user is currently signed in, he/she might want to add another account to signin
         if user_signed_in?
-          puts " *** Here 2"
           if auth
             flash[:notice] = 'Your account at ' + @authhash[:provider].capitalize + ' is already connected with this site.'
             redirect_to services_path
           else
-            puts " *** Here 3"
             current_user.services.create!(:provider => @authhash[:provider], :uid => @authhash[:uid], :uname => @authhash[:name], :uemail => @authhash[:email])
             flash[:notice] = 'Your ' + @authhash[:provider].capitalize + ' account has been added for signing in at this site.'
             redirect_to services_path
           end
         else
           if auth
-            puts " *** Here 4"
             # signin existing user
             # in the session his user id and the service id used for signing in is stored
             session[:user_id] = auth.user.id
@@ -143,19 +119,16 @@ class ServicesController < ApplicationController
             flash[:notice] = 'Signed in successfully via ' + @authhash[:provider].capitalize + '.'
             redirect_to root_url
           else
-            puts " *** Here 5"
             # this is a new user; show signup; @authhash is available to the view and stored in the sesssion for creation of a new user
             session[:authhash] = @authhash
             render signup_services_path
           end
         end
       else
-        puts " *** Here 6"
         flash[:error] =  'Error while authenticating via ' + service_route + '/' + @authhash[:provider].capitalize + '. The service returned invalid data for the user id.'
         redirect_to signin_path
       end
     else
-      puts " *** Here 7"
       flash[:error] = 'Error while authenticating via ' + service_route.capitalize + '. The service did not return valid data.'
       redirect_to signin_path
     end
