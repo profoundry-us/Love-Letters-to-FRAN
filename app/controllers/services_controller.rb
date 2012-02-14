@@ -79,6 +79,8 @@ class ServicesController < ApplicationController
       
       # create a new hash
       @authhash = Hash.new
+
+      puts " *** Here 0.25"
       
       if service_route == 'facebook'
         omniauth['extra']['user_hash']['email'] ? @authhash[:email] =  omniauth['extra']['user_hash']['email'] : @authhash[:email] = ''
