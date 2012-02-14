@@ -103,18 +103,23 @@ class ServicesController < ApplicationController
         
         auth = Service.find_by_provider_and_uid(@authhash[:provider], @authhash[:uid])
 
+        puts " *** Here 1"
+
         # if the user is currently signed in, he/she might want to add another account to signin
         if user_signed_in?
+          puts " *** Here 2"
           if auth
             flash[:notice] = 'Your account at ' + @authhash[:provider].capitalize + ' is already connected with this site.'
             redirect_to services_path
           else
+            puts " *** Here 3"
             current_user.services.create!(:provider => @authhash[:provider], :uid => @authhash[:uid], :uname => @authhash[:name], :uemail => @authhash[:email])
             flash[:notice] = 'Your ' + @authhash[:provider].capitalize + ' account has been added for signing in at this site.'
             redirect_to services_path
           end
         else
           if auth
+            puts " *** Here 4"
             # signin existing user
             # in the session his user id and the service id used for signing in is stored
             session[:user_id] = auth.user.id
@@ -123,16 +128,19 @@ class ServicesController < ApplicationController
             flash[:notice] = 'Signed in successfully via ' + @authhash[:provider].capitalize + '.'
             redirect_to root_url
           else
+            puts " *** Here 5"
             # this is a new user; show signup; @authhash is available to the view and stored in the sesssion for creation of a new user
             session[:authhash] = @authhash
             render signup_services_path
           end
         end
       else
+        puts " *** Here 6"
         flash[:error] =  'Error while authenticating via ' + service_route + '/' + @authhash[:provider].capitalize + '. The service returned invalid data for the user id.'
         redirect_to signin_path
       end
     else
+      puts " *** Here 7"
       flash[:error] = 'Error while authenticating via ' + service_route.capitalize + '. The service did not return valid data.'
       redirect_to signin_path
     end
