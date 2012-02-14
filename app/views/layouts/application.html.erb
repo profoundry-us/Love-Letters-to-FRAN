@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>OmniauthDemo</title>
-  <%= stylesheet_link_tag :all %>
+  <%= stylesheet_link_tag 'services' %>
   <%= javascript_include_tag :defaults %>
   <%= csrf_meta_tag %>
 </head>
@@ -24,10 +24,8 @@
 				<ul>
 					<span>Sign in with:</span>
 					<li><%= link_to "Facebook", "/auth/facebook" %></li>
-					<li><%= link_to "Google", "/auth/google" %></li>
-					<li><%= link_to "Yahoo", "/auth/yahoo" %>
-					<li><%= link_to "MyOpenID", "/auth/myopenid" %>
-					<li><%= link_to "Other", signin_services_path %>
+					<li><%= link_to "Twitter", "/auth/twitter" %></li>
+          <!-- <li><%= link_to "Other", signin_services_path %></li> //-->
 				</ul>
 			</nav>
 		<% end %>
