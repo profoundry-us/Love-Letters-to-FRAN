@@ -106,10 +106,11 @@ class ServicesController < ApplicationController
       puts " *** Here 0.5"
       
       if @authhash[:uid] != '' and @authhash[:provider] != ''
+        puts " *** Here 1: #{@authhash[:provider]}, #{@authhash[:uid]}"
         
         auth = Service.find_by_provider_and_uid(@authhash[:provider], @authhash[:uid])
+        puts " *** Here 1.25"
 
-        puts " *** Here 1"
 
         # if the user is currently signed in, he/she might want to add another account to signin
         if user_signed_in?
