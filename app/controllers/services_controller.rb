@@ -80,7 +80,7 @@ class ServicesController < ApplicationController
       # create a new hash
       @authhash = Hash.new
 
-      puts " *** Here 0.25"
+      puts " *** Here 0.25: #{omniauth.inspect}"
       
       if service_route == 'facebook'
         omniauth['extra']['user_hash']['email'] ? @authhash[:email] =  omniauth['extra']['user_hash']['email'] : @authhash[:email] = ''
@@ -93,6 +93,7 @@ class ServicesController < ApplicationController
         omniauth['extra']['user_hash']['id'] ? @authhash[:uid] =  omniauth['extra']['user_hash']['id'].to_s : @authhash[:uid] = ''
         omniauth['provider'] ? @authhash[:provider] =  omniauth['provider'] : @authhash[:provider] = ''  
       elsif ['google', 'yahoo', 'twitter', 'myopenid', 'open_id'].index(service_route) != nil
+        puts " *** Here 0.3: #{omniauth['uid']}, #{omniauth['user_info'].inspect}"
         omniauth['user_info']['email'] ? @authhash[:email] =  omniauth['user_info']['email'] : @authhash[:email] = ''
         omniauth['user_info']['name'] ? @authhash[:name] =  omniauth['user_info']['name'] : @authhash[:name] = ''
         omniauth['uid'] ? @authhash[:uid] = omniauth['uid'].to_s : @authhash[:uid] = ''
