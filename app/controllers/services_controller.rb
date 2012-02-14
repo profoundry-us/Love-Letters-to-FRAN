@@ -87,13 +87,19 @@ class ServicesController < ApplicationController
         omniauth['extra']['user_hash']['name'] ? @authhash[:name] =  omniauth['extra']['user_hash']['name'] : @authhash[:name] = ''
         omniauth['extra']['user_hash']['id'] ?  @authhash[:uid] =  omniauth['extra']['user_hash']['id'].to_s : @authhash[:uid] = ''
         omniauth['provider'] ? @authhash[:provider] = omniauth['provider'] : @authhash[:provider] = ''
+      elsif service_route == 'twitter'
+        # Email is not provided by twitter
+        puts " *** Here 0.3: #{omniauth['uid']}, #{omniauth['user_info'].inspect}"
+        @authhash[:email] = ""
+        @authhash[:name] = (omniauth['raw_info']['name'] ? omniauth['raw_info']['name'] : '')
+        @authhash[:id] = (omniauth['raw_info']['screen_name'] ? omniauth['raw_info']['screen_)name'] : ''
+        @authhash[:provider] = (omniauth['provider'] ? omniauth['provider'] : '')
       elsif service_route == 'github'
         omniauth['user_info']['email'] ? @authhash[:email] =  omniauth['user_info']['email'] : @authhash[:email] = ''
         omniauth['user_info']['name'] ? @authhash[:name] =  omniauth['user_info']['name'] : @authhash[:name] = ''
         omniauth['extra']['user_hash']['id'] ? @authhash[:uid] =  omniauth['extra']['user_hash']['id'].to_s : @authhash[:uid] = ''
         omniauth['provider'] ? @authhash[:provider] =  omniauth['provider'] : @authhash[:provider] = ''  
-      elsif ['google', 'yahoo', 'twitter', 'myopenid', 'open_id'].index(service_route) != nil
-        puts " *** Here 0.3: #{omniauth['uid']}, #{omniauth['user_info'].inspect}"
+      elsif ['google', 'yahoo', 'myopenid', 'open_id'].index(service_route) != nil
         omniauth['user_info']['email'] ? @authhash[:email] =  omniauth['user_info']['email'] : @authhash[:email] = ''
         omniauth['user_info']['name'] ? @authhash[:name] =  omniauth['user_info']['name'] : @authhash[:name] = ''
         omniauth['uid'] ? @authhash[:uid] = omniauth['uid'].to_s : @authhash[:uid] = ''
