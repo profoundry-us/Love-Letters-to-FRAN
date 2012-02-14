@@ -69,8 +69,6 @@ class ServicesController < ApplicationController
 
     # get the full hash from omniauth
     omniauth = request.env['omniauth.auth']
-        render :text => omniauth.to_yaml
-        return
     
     # continue only if hash and parameter exist
     if omniauth and params[:service]
