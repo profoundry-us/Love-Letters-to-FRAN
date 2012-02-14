@@ -17,6 +17,12 @@ Fran::Application.routes.draw do
     end
   end
 
+  resources :users, :only => [:index] do
+    collection do
+      get 'test'
+    end
+  end
+
   root :to => "users#index"
 
 end
